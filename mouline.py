@@ -56,15 +56,16 @@ with open(DATA_CSV,'w') as csv_file:
     header = header + SEP + 'Lieu' + '\n'
     csv_file.write(header)
 
-    cpt = 1
     with os.scandir(DIR) as entries:
         for file in entries:
             cur_file = DIR + file.name
+            tmp_nb = file.name.replace(').xlsx', '')
+            nb = tmp_nb.split('(')[1]
             wb = load_workbook(cur_file)
             sheet = wb[SHEETNAME]
             entreprise = sheet['A2'].value.replace('Entreprise:', '').strip()
-            site = sheet['A3'].value.replace('Site:', '').replace('(', '').replace(')', '').strip()
-            res_row = str(cpt) + SEP + entreprise 
+            site = sheet['A3'].value.replace('Site:', '').replace('(', '').replace(')', '').replace('Siège','').strip()
+            res_row = str(nb) + SEP + entreprise 
             for data_ref in DATA_REFS:
                 cur_li = data_ref["li"]
                 cur_cell = "D" + cur_li
@@ -74,4 +75,3 @@ with open(DATA_CSV,'w') as csv_file:
                 res_row = res_row + SEP + data
             res_row = res_row + SEP +  site + '\n'
             csv_file.write(res_row)
-            cpt += 1
