@@ -48,6 +48,12 @@ DATA_REFS = [
     {"col": "K30", "li": '49'}
 ]
 
+def get_num(fileEntry):
+    tmp_nb = fileEntry.name.replace(').xlsx', '')
+    nb = tmp_nb.split('(')[1]
+    return int(nb)
+    
+
 with open(DATA_CSV,'w') as csv_file:
     header = 'Num' + SEP + 'Nom'
     for dr in DATA_REFS:
@@ -57,10 +63,11 @@ with open(DATA_CSV,'w') as csv_file:
     csv_file.write(header)
 
     with os.scandir(DIR) as entries:
-        for file in entries:
+        files = list(entries)
+        files.sort(key=lambda x: get_num(x))
+        for file in files:
             cur_file = DIR + file.name
-            tmp_nb = file.name.replace(').xlsx', '')
-            nb = tmp_nb.split('(')[1]
+            nb = get_num(file)
             wb = load_workbook(cur_file)
             sheet = wb[SHEETNAME]
             entreprise = sheet['A2'].value.replace('Entreprise:', '').strip()
