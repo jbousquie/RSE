@@ -76,9 +76,13 @@ with open(DATA_CSV,'w') as csv_file:
             for data_ref in DATA_REFS:
                 cur_li = data_ref["li"]
                 cur_cell = "D" + cur_li
-                data = sheet[cur_cell].value
-                if data == None:
-                    data = 'NR'
+                value = sheet[cur_cell].value
+                if value == None:
+                    data = ''
+                else:
+                    value = value.rstrip('%')
+                    data = str(int(value) * 0.01)
+
                 res_row = res_row + SEP + data
             res_row = res_row + SEP +  site + '\n'
             csv_file.write(res_row)
