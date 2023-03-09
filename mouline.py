@@ -81,7 +81,7 @@ with open(DATA_CSV,'w') as csv_file:
                     data = ''
                 else:
                     value = value.rstrip('%')
-                    data = str(int(value) * 0.01)
+                    data = str(round(int(value) * 0.01, 2)).replace('.', ',')
 
                 res_row = res_row + SEP + data
             res_row = res_row + SEP +  site + '\n'
